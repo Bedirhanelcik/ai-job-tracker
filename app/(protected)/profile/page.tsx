@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
@@ -18,7 +17,7 @@ import {
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
-  const searchParams = useSearchParams();
+
 
 const [showAtsWarning, setShowAtsWarning] =
   useState(false);
