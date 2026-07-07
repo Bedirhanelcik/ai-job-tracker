@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
@@ -12,6 +12,8 @@ export default function ProtectedLayout({
   const router = useRouter();
   const pathname = usePathname();
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const checkUser = async () => {
       const {
@@ -19,7 +21,7 @@ export default function ProtectedLayout({
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push("/login");
+        router.replace("/login");
         return;
       }
 
@@ -31,13 +33,21 @@ export default function ProtectedLayout({
         .maybeSingle();
 
       if (!resume && pathname !== "/resume") {
-        router.push("/resume");
+        router.replace("/resume");
         return;
       }
+
+      setLoading(false);
     };
 
     checkUser();
   }, [router, pathname]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-black" />
+    );
+  }
 
   return <>{children}</>;
 }

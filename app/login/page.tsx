@@ -16,9 +16,9 @@ export default function LoginPage() {
         data: { user },
       } = await supabase.auth.getUser();
 
-      if (user) {
-        router.push("/dashboard");
-      }
+    if (user) {
+  router.replace("/resume");
+}
     };
 
     checkUser();
@@ -40,7 +40,7 @@ export default function LoginPage() {
 );
 
 setTimeout(() => {
-  router.push("/resume");
+  router.replace("/resume");
 }, 500);
   };
 
