@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
-
+import { toast } from "sonner";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +35,13 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/resume");
+    toast.success(
+  "Successfully signed in! Redirecting..."
+);
+
+setTimeout(() => {
+  router.push("/resume");
+}, 1500);
   };
 
   return (

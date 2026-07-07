@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
-
+import { toast } from "sonner";
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,9 +43,13 @@ export default function RegisterPage() {
       return;
     }
 
-    alert("Account created successfully");
+toast.success(
+  "Account created successfully! Redirecting..."
+);
 
-    router.push("/resume");
+setTimeout(() => {
+  router.push("/resume");
+}, 2000);
   };
 
   return (
