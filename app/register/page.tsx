@@ -49,7 +49,7 @@ toast.success(
 
 setTimeout(() => {
   router.push("/resume");
-}, 2000);
+}, 500);
   };
 
   return (

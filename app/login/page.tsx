@@ -41,7 +41,7 @@ export default function LoginPage() {
 
 setTimeout(() => {
   router.push("/resume");
-}, 1500);
+}, 500);
   };
 
   return (
