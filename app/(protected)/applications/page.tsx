@@ -1,8 +1,11 @@
   "use client";
 
+  import DarkVeil from "../../../components/DarkVeil";
   import { useEffect, useRef, useState } from "react";
   import Link from "next/link";
   import { toast } from "sonner"; 
+  import Image from "next/image";
+import { BadgeCheck } from "lucide-react";
   import { supabase } from "@/lib/supabase";
   import {
     Plus,
@@ -404,7 +407,21 @@ backdrop-blur-xl
   </div>
 
 )}
-        <main className="min-h-screen bg-black text-white">
+        <main className="relative min-h-screen overflow-hidden text-white">
+          {/* Background */}
+<div className="absolute inset-0 -z-20">
+  <DarkVeil
+    hueShift={0}
+    noiseIntensity={0}
+    scanlineIntensity={0}
+    speed={0.5}
+    scanlineFrequency={0}
+    warpAmount={0}
+  />
+</div>
+
+{/* Overlay */}
+<div className="absolute inset-0 -z-10 bg-black/45" />
           <div className="max-w-7xl mx-auto px-8 py-10">
 
             <div className="flex items-center justify-between mb-10">
@@ -543,7 +560,7 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
 
 </div>
 
-             <div className="rounded-3xl border border-zinc-800 bg-zinc-950 p-6">
+             <div className="rounded-3xl border border-white/10 bg-black/30 backdrop-blur-xl p-6">
   <Sparkles className="mb-4 text-emerald-400" />
 
   <p className="text-zinc-500">
@@ -561,7 +578,7 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
   </h2>
 </div>
 
-              <div className="rounded-3xl border border-zinc-800 bg-zinc-950 p-6">
+              <div className="rounded-3xl border border-white/10 bg-black/30 backdrop-blur-xl p-6">
                 <Building2 className="mb-4 text-purple-400" />
 
                 <p className="text-zinc-500">
@@ -590,12 +607,13 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
                   cursor-pointer
                   rounded-3xl
                   border
-                  border-zinc-800
+                  border-white/10
                   bg-gradient-to-b
-                  from-zinc-900
-                  to-black
+                  from-[#111827]/70
+to-[#09090B]/50
+backdrop-blur-xl
                   p-6
-                  hover:border-blue-500/40
+                  hover:border-violet-500/40
                   hover:-translate-y-1
                   hover:shadow-[0_0_50px_rgba(59,130,246,0.15)]
                   transition-all
@@ -604,76 +622,93 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
                 >
               
 
-                 <div className="flex items-start justify-between">
+      <div className="flex items-start gap-4">
 
-  <div className="flex items-center gap-4">
-
-    <div
-      className="
+  <div
+    className="
       flex
       h-14
       w-14
+      shrink-0
       items-center
       justify-center
       rounded-2xl
       border
       border-white/10
-      bg-white/5
+      bg-transparent
       transition-all
       duration-300
-      group-hover:scale-110
+      group-hover:scale-105
       group-hover:border-indigo-500/30
-      "
-    >
-      <Building2
-        size={24}
-        className="text-indigo-400"
-      />
-    </div>
+    "
+  >
+    <Image
+  src={
+    app.company.toLowerCase().includes("google")
+      ? "/companies/google.png"
+      : app.company.toLowerCase().includes("microsoft")
+      ? "/companies/microsoft.png"
+      : app.company.toLowerCase().includes("amazon")
+      ? "/companies/amazon.png"
+      : "/companies/default.png"
+  }
+  alt={app.company}
+  width={
+    app.company.toLowerCase().includes("google")
+      ? 42
+      : app.company.toLowerCase().includes("microsoft")
+      ? 52
+      : app.company.toLowerCase().includes("amazon")
+      ? 48
+      : 34
+  }
+  height={
+    app.company.toLowerCase().includes("google")
+      ? 42
+      : app.company.toLowerCase().includes("microsoft")
+      ? 52
+      : app.company.toLowerCase().includes("amazon")
+      ? 48
+      : 34
+  }
+  className="object-contain"
+/>
+  </div>
 
-    <div>
+  <div className="flex-1">
+
+    <div className="flex items-center gap-2">
 
       <h3 className="text-2xl font-bold text-white">
         {app.company}
       </h3>
 
-      <p className="mt-1 text-zinc-400">
-        {app.position}
-      </p>
+      <BadgeCheck
+        size={18}
+        className="fill-sky-500 text-white"
+      />
 
     </div>
 
+    <p className="mt-1 text-zinc-400">
+      {app.position}
+    </p>
+
   </div>
 
-  <span
-    className="
-    rounded-full
-    border
-    border-blue-500/20
-    bg-blue-500/10
-    px-3
-    py-1
-    text-xs
-    font-semibold
-    text-blue-300
-    "
-  >
-    ✓ Verified
-  </span>
-
 </div>
-
 <p
   className="
-  mt-7
-  line-clamp-2
-  text-sm
-  leading-7
-  text-zinc-500
+    mt-7
+    line-clamp-2
+    text-sm
+    leading-7
+    text-zinc-500
   "
 >
   {app.job_description}
 </p>
+
 <div className="mt-6 flex flex-wrap gap-2">
 
   {["React", "TypeScript", "Next.js", "Tailwind"].map((skill) => (
@@ -681,19 +716,19 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
     <span
       key={skill}
       className="
-      rounded-full
-      border
-      border-white/10
-      bg-white/5
-      px-3
-      py-2
-      text-xs
-      font-medium
-      text-zinc-300
-      transition-all
-      duration-300
-      group-hover:border-indigo-500/30
-      group-hover:bg-indigo-500/10
+        rounded-full
+        border
+        border-white/10
+        bg-white/5
+        px-3
+        py-2
+        text-xs
+        font-medium
+        text-zinc-300
+        transition-all
+        duration-300
+        group-hover:border-indigo-500/30
+        group-hover:bg-indigo-500/10
       "
     >
       {skill}
@@ -702,12 +737,12 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
   ))}
 
 </div>
+
                 </div>
               ))}
             </div>
           </div>
         </main>
-
         {selectedApp && (
           <>
             <div
@@ -722,9 +757,9 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
               right-0
               h-screen
               w-[700px]
-              bg-zinc-950
+              bg-black/30 backdrop-blur-xl
               border-l
-              border-zinc-800
+              border-white/10
               z-[9999]
               overflow-y-auto
               p-8
@@ -752,7 +787,7 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
                   w-12
                   rounded-xl
                   border
-                  border-zinc-800
+                  border-white/10
                   flex
                   items-center
                   justify-center
@@ -818,7 +853,7 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
 
           
 
-    <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-5">
+    <div className="rounded-2xl border border-white/10 bg-zinc-900 p-5">
       <p className="text-zinc-500 text-sm">
         Position
       </p>
@@ -830,7 +865,7 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
 
   </div>
 
-  <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-5">
+  <div className="rounded-2xl border border-white/10 bg-zinc-900 p-5">
     <p className="text-zinc-500 mb-3">
       Job URL
     </p>
@@ -848,7 +883,7 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
     )}
   </div>
 
-  <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-5">
+  <div className="rounded-2xl border border-white/10 bg-zinc-900 p-5">
     <p className="text-zinc-500 mb-3">
       Job Description
     </p>
@@ -858,7 +893,7 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
   </div>
   </div>
 
-<div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-5 flex items-center gap-3">
+<div className="rounded-2xl border border-white/10 bg-zinc-900 p-5 flex items-center gap-3">
   <Calendar size={18} />
 
   <span>

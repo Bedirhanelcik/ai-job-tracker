@@ -28,10 +28,12 @@ export default function RootLayout({
       lang="en"
       className={`dark ${geistSans.variable} ${geistMono.variable}`}
     >
-      <body className="bg-zinc-950 text-white min-h-screen">
+      <body
+        className={`${geistSans.className} bg-zinc-950 text-white min-h-screen`}
+      >
         {children}
 
-      <Toaster
+        <Toaster
           position="top-center"
           richColors
           closeButton
