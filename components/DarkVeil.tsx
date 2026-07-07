@@ -96,15 +96,28 @@ export default function DarkVeil({
 }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
-    const canvas = ref.current as HTMLCanvasElement;
-    const parent = canvas.parentElement as HTMLElement;
+   const canvas = ref.current;
 
-    const renderer = new Renderer({
-      dpr: Math.min(window.devicePixelRatio, 2),
-      canvas
-    });
+if (!canvas) return;
+
+const parent = canvas.parentElement;
+
+if (!parent) return;
+
+  let renderer: Renderer;
+
+try {
+  renderer = new Renderer({
+    dpr: Math.min(window.devicePixelRatio, 2),
+    canvas,
+  });
+} catch (err) {
+  console.error("DarkVeil WebGL error:", err);
+  return;
+}
 
     const gl = renderer.gl;
+    if (!gl) return;
     const geometry = new Triangle(gl);
 
     const program = new Program(gl, {
@@ -149,10 +162,11 @@ export default function DarkVeil({
 
     loop();
 
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener('resize', resize);
-    };
+  return () => {
+  cancelAnimationFrame(frame);
+  window.removeEventListener("resize", resize);
+  gl.getExtension("WEBGL_lose_context")?.loseContext();
+};
   }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale]);
   return <canvas ref={ref} className="w-full h-full block" />;
 }
