@@ -61,12 +61,25 @@ export default function LoginPage() {
           className="w-full border p-3 rounded mb-3"
         />
 
-        <button
-          onClick={handleLogin}
-          className="w-full bg-black text-white p-3 rounded"
-        >
-          Login
-        </button>
+    <button
+  onClick={handleLogin}
+  className="
+    w-full
+    rounded-xl
+    bg-black
+    py-3
+    text-white
+    font-semibold
+    cursor-pointer
+    transition-all
+    duration-200
+    active:scale-95
+    hover:bg-zinc-800
+    hover:shadow-[0_8px_30px_rgba(255,255,255,0.12)]
+  "
+>
+  Login
+</button>
       </div>
     </main>
   );
