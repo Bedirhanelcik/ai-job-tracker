@@ -48,7 +48,65 @@ The platform integrates Google Gemini AI with Supabase and Next.js to provide in
 This project was developed independently as a portfolio application to demonstrate practical experience in Full Stack Development, Artificial Intelligence integration, Authentication Systems, Database Design, and modern UI/UX development.
 
 ---
+# ⚙️ How It Works
 
+### 1. Create an Account
+
+Users sign up or log into the platform.
+
+---
+
+### 2. Upload Resume
+
+Upload a PDF or DOCX resume.
+
+The application extracts text automatically.
+
+---
+
+### 3. Browse Jobs
+
+Explore available job listings created by employers.
+
+---
+
+### 4. AI Resume Analysis
+
+Click **Apply Now**.
+
+Google Gemini AI compares:
+
+- Resume
+- Job Description
+
+and generates:
+
+- ATS Match Score
+- Strengths
+- Missing Skills
+- AI Recommendations
+
+---
+
+### 5. Save Application
+
+Every application is stored inside Supabase.
+
+Users can revisit previous analyses without generating them again.
+
+---
+
+### 6. Dashboard
+
+The Dashboard provides:
+
+- Average Match Score
+- Recent Applications
+- AI Analysis Summary
+- Interview Statistics
+- Offer Statistics
+
+--- 
 # 🛠 Tech Stack
 
 ## Frontend
