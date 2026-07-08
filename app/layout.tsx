@@ -14,8 +14,54 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Job Tracker",
-  description: "Track job applications with AI",
+  title: {
+    default: "CvMatch",
+    template: "%s | CvMatch",
+  },
+
+  description:
+    "AI-powered resume analyzer and job application tracker. Analyze your CV, improve your ATS score, identify missing skills, and manage applications with Google Gemini AI.",
+
+  applicationName: "CvMatch",
+
+  keywords: [
+    "CV",
+    "Resume",
+    "ATS",
+    "AI Resume Analyzer",
+    "Job Tracker",
+    "Next.js",
+    "Supabase",
+    "Gemini AI",
+  ],
+
+  authors: [
+    {
+      name: "Bedirhan Elçik",
+    },
+  ],
+
+  creator: "Bedirhan Elçik",
+
+ icons: {
+  icon: "/icon.png",
+  shortcut: "/icon.png",
+  apple: "/icon.png",
+},
+  openGraph: {
+    title: "CvMatch",
+    description:
+      "AI-powered resume analyzer and job application tracker.",
+    type: "website",
+    siteName: "CvMatch",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "CvMatch",
+    description:
+      "AI-powered resume analyzer and job application tracker.",
+  },
 };
 
 export default function RootLayout({

@@ -16,7 +16,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
   import.meta.url
 ).toString();
-import mammoth from "mammoth";
+import { renderAsync } from "docx-preview";
 export default function ResumePage() {
   const [file, setFile] = useState<File | null>(null);
   const [currentResume, setCurrentResume] = useState<any>(null);
@@ -225,13 +225,13 @@ const extractPdfText = async (file: File) => {
 };
 
 const extractDocxText = async (file: File) => {
-  const buffer = Buffer.from(await file.arrayBuffer());
+  const arrayBuffer = await file.arrayBuffer();
 
-  const result = await mammoth.extractRawText({
-    buffer,
-  });
+  const container = document.createElement("div");
 
-  return result.value;
+  await renderAsync(arrayBuffer, container);
+
+  return container.textContent?.trim() || "";
 };
   const handleUpload = async () => {
     setLoadingUpload(true);
