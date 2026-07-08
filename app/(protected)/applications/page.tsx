@@ -22,6 +22,7 @@ import { BadgeCheck } from "lucide-react";
 
   export default function ApplicationsPage() {
     const [applications, setApplications] = useState<any[]>([]);
+    const [myApplications, setMyApplications] = useState<any[]>([]);
     const [selectedApp, setSelectedApp] = useState<any>(null);
     const [editing, setEditing] = useState(false);
 const [editCompany, setEditCompany] = useState("");
@@ -199,6 +200,12 @@ const loadProfile = async () => {
         });
 
       setApplications(data || []);
+      const { data: applied } = await supabase
+  .from("applications")
+  .select("id")
+  .eq("user_id", user.id);
+
+setMyApplications(applied || []);
     };
 
 
@@ -442,11 +449,9 @@ backdrop-blur-xl
 
     Discover Your
 
-    <span className="block bg-gradient-to-r from-white via-indigo-300 to-violet-400 bg-clip-text text-transparent">
-
-      Next Opportunity
-
-    </span>
+   <span className="block text-[#B794F6]">
+  Next Opportunity
+</span>
 
   </h1>
 
@@ -455,13 +460,39 @@ backdrop-blur-xl
     Browse verified job opportunities, compare your AI match score,
     and track every application in one intelligent workspace.
 
-  </p>
+</p>
 
 </div>
-{isEmployer && (
-              <Link
-                href="/applications/new"
-               className="
+
+<div className="flex items-center gap-4">
+
+  {myApplications.length > 0 && (
+    <Link
+      href="/dashboard"
+      className="
+      group
+      rounded-2xl
+      border
+      border-white/10
+      bg-white/5
+      px-7
+      py-4
+      font-semibold
+      text-white
+      transition-all
+      duration-300
+      hover:border-indigo-500/30
+      hover:bg-indigo-500/10
+      "
+    >
+      Dashboard
+    </Link>
+  )}
+
+  {isEmployer && (
+    <Link
+      href="/applications/new"
+      className="
 group
 relative
 overflow-hidden
@@ -482,21 +513,22 @@ duration-300
 hover:-translate-y-1
 hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
 "
-              >
-               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-120%] transition duration-700 group-hover:translate-x-[120%]" />
+    >
+      <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-120%] transition duration-700 group-hover:translate-x-[120%]" />
 
-<div className="relative flex items-center gap-2">
+      <div className="relative flex items-center gap-2">
+        <Plus size={18} />
+        Create Job Listing
+      </div>
 
-  <Plus size={18} />
-
-  Create Job Listing
+    </Link>
+  )}
 
 </div>
-              </Link>
-              )}
-            </div>
 
-            <div className="mt-14 grid gap-6 lg:grid-cols-4">
+</div>
+
+<div className="mt-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
             <div
   className="
@@ -504,12 +536,13 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
   relative
   overflow-hidden
   rounded-[28px]
+  h-[220px]
   border
   border-white/10
   bg-gradient-to-b
   from-[#111827]
   to-[#09090B]
-  p-7
+  p-5
   transition-all
   duration-300
   hover:-translate-y-1
@@ -560,7 +593,20 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
 
 </div>
 
-             <div className="rounded-3xl border border-white/10 bg-black/30 backdrop-blur-xl p-6">
+             <div className="rounded-[28px]
+h-[220px]
+border
+border-white/10
+bg-gradient-to-b
+from-[#111827]
+to-[#09090B]
+p-5
+backdrop-blur-xl
+transition-all
+duration-300
+hover:-translate-y-1
+hover:border-emerald-500/30
+hover:shadow-[0_0_45px_rgba(16,185,129,.18)]">
   <Sparkles className="mb-4 text-emerald-400" />
 
   <p className="text-zinc-500">
@@ -578,7 +624,20 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
   </h2>
 </div>
 
-              <div className="rounded-3xl border border-white/10 bg-black/30 backdrop-blur-xl p-6">
+              <div className="rounded-[28px]
+h-[220px]
+border
+border-white/10
+bg-gradient-to-b
+from-[#111827]
+to-[#09090B]
+p-5
+backdrop-blur-xl
+transition-all
+duration-300
+hover:-translate-y-1
+hover:border-emerald-500/30
+hover:shadow-[0_0_45px_rgba(16,185,129,.18)]">
                 <Building2 className="mb-4 text-purple-400" />
 
                 <p className="text-zinc-500">
@@ -593,7 +652,7 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
               </div>
             </div>
 
-            <div className="grid xl:grid-cols-3 lg:grid-cols-2 gap-6">
+            <div className="mt-9 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 items-start">
               {applications.map((app) => (
                 <div
                   key={app.id}
@@ -602,6 +661,10 @@ hover:shadow-[0_20px_45px_rgba(99,102,241,.45)]
                   }
                   className="
                   group
+                  min-h-[247px]
+flex
+flex-col
+justify-between
                   relative
                   overflow-hidden
                   cursor-pointer
@@ -642,36 +705,22 @@ backdrop-blur-xl
       group-hover:border-indigo-500/30
     "
   >
-    <Image
+ <Image
   src={
-    app.company.toLowerCase().includes("google")
-      ? "/companies/google.png"
-      : app.company.toLowerCase().includes("microsoft")
-      ? "/companies/microsoft.png"
-      : app.company.toLowerCase().includes("amazon")
-      ? "/companies/amazon.png"
-      : "/companies/default.png"
+  app.company.toLowerCase().includes("google")
+  ? "/companies/google.png"
+  : app.company.toLowerCase().includes("microsoft")
+  ? "/companies/microsoft.png"
+  : app.company.toLowerCase().includes("amazon")
+  ? "/companies/amazon.png"
+  : app.company.toLowerCase().includes("adobe")
+  ? "/companies/adobe.png"
+  : "/companies/default.png"
   }
   alt={app.company}
-  width={
-    app.company.toLowerCase().includes("google")
-      ? 42
-      : app.company.toLowerCase().includes("microsoft")
-      ? 52
-      : app.company.toLowerCase().includes("amazon")
-      ? 48
-      : 34
-  }
-  height={
-    app.company.toLowerCase().includes("google")
-      ? 42
-      : app.company.toLowerCase().includes("microsoft")
-      ? 52
-      : app.company.toLowerCase().includes("amazon")
-      ? 48
-      : 34
-  }
-  className="object-contain"
+  width={40}
+  height={40}
+  className="h-10 w-10 object-contain"
 />
   </div>
 
@@ -1403,7 +1452,7 @@ backdrop-blur-xl
 {step >= 4 && (
   <div
     className="
-      mt-12
+      mt-9
       animate-in
       fade-in
       slide-in-from-bottom-5

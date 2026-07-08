@@ -98,6 +98,15 @@ setTimeout(() => {
 >
   Register
 </button>
+<p className="mt-5 text-center text-sm text-zinc-500">
+  Already have an account?{" "}
+  <button
+    onClick={() => router.push("/login")}
+    className="font-semibold text-indigo-400 hover:text-indigo-300 transition cursor-pointer"
+  >
+    Login
+  </button>
+</p>
       </div>
     </main>
   );

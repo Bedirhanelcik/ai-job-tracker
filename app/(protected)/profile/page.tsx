@@ -179,13 +179,51 @@ const handleSaveProfile = async () => {
 
   </div>
 ) : (
+<div className="flex items-center gap-4">
+
+  <button
+    onClick={() => router.push("/dashboard")}
+    className="
+      group
+      rounded-2xl
+      border
+      border-white/10
+      bg-white/5
+      px-7
+      py-4
+      font-semibold
+      text-white
+      transition-all
+      duration-300
+      hover:border-indigo-500/30
+      hover:bg-indigo-500/10
+      cursor-pointer
+    "
+  >
+    Dashboard
+  </button>
+
   <button
     onClick={handleLogout}
-    className="flex items-center gap-2 rounded-2xl bg-red-500 hover:bg-red-600 px-6 py-4 font-semibold transition-all"
+    className="
+      flex
+      items-center
+      gap-2
+      rounded-2xl
+      bg-red-500
+      hover:bg-red-600
+      px-6
+      py-4
+      font-semibold
+      transition-all
+      cursor-pointer
+    "
   >
     <LogOut size={18} />
     Logout
   </button>
+
+</div>
 )}
 
         </div>

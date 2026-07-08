@@ -49,30 +49,6 @@ useEffect(() => {
         return;
       }
 
-      const matchRes = await fetch(
-        "/api/match-job",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-          body: JSON.stringify({
-            jobDescription,
-          }),
-        }
-      );
-
-      const matchData =
-        await matchRes.json();
-
-      const parsed = JSON.parse(
-        matchData.result
-          .replace("```json", "")
-          .replace("```", "")
-          .trim()
-      );
-
 const { error } = await supabase
   .from("job_listings")
   .insert({

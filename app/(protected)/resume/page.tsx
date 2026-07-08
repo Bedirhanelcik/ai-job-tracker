@@ -10,7 +10,13 @@ import {
   CheckCircle2,
   Info,
 } from "lucide-react";
+import * as pdfjsLib from "pdfjs-dist";
 
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
+import mammoth from "mammoth";
 export default function ResumePage() {
   const [file, setFile] = useState<File | null>(null);
   const [currentResume, setCurrentResume] = useState<any>(null);
@@ -197,7 +203,36 @@ setTimeout(() => {
       setLoadingAnalysis(false);
     }
   };
+const extractPdfText = async (file: File) => {
+  const pdf = await pdfjsLib.getDocument({
+    data: await file.arrayBuffer(),
+  }).promise;
 
+  let text = "";
+
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+
+    const content = await page.getTextContent();
+
+    text +=
+      content.items
+        .map((item: any) => item.str)
+        .join(" ") + "\n";
+  }
+
+  return text;
+};
+
+const extractDocxText = async (file: File) => {
+  const buffer = Buffer.from(await file.arrayBuffer());
+
+  const result = await mammoth.extractRawText({
+    buffer,
+  });
+
+  return result.value;
+};
   const handleUpload = async () => {
     setLoadingUpload(true);
     setLoadingStep("Uploading Resume...");
@@ -220,7 +255,12 @@ const {
       return;
     }
 
-    const filePath = `${user.id}/${Date.now()}-${file.name}`;
+    const safeFileName = file.name
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .replace(/[^a-zA-Z0-9._-]/g, "-");
+
+const filePath = `${user.id}/${Date.now()}-${safeFileName}`;
 
     const { error } = await supabase.storage
       .from("resumes")
@@ -231,18 +271,27 @@ const {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
+setLoadingStep("Reading Resume...");
 
-    setLoadingStep("Extracting Resume...");
-    const extractRes = await fetch("/api/extract-cv", {
-      method: "POST",
-      body: formData,
-    });
-const extracted = await extractRes.json();
+let extractedText = "";
 
-if (!extractRes.ok) {
-  toast.error(extracted.error || "Failed to read the resume.");
+try {
+  if (file.name.toLowerCase().endsWith(".pdf")) {
+    extractedText = await extractPdfText(file);
+  } else {
+    extractedText = await extractDocxText(file);
+  }
+} catch (err) {
+  console.error(err);
+
+  toast.error("Failed to read the resume.");
+
+  return;
+}
+
+if (!extractedText.trim()) {
+  toast.error("No readable text found.");
+
   return;
 }
 await supabase
@@ -250,7 +299,7 @@ await supabase
   .insert({
     user_id: user.id,
     file_name: file.name,
-    content: extracted.text,
+    content: extractedText,
   });
  toast.success("Resume uploaded!", {
   description: "Analyzing your resume...",

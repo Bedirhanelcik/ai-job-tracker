@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import CountUp from "../../../components/CountUp";
-
+import Image from "next/image";
 import {
   LayoutDashboard,
   Briefcase,
@@ -25,9 +26,14 @@ TrendingUp,
 
 export default function Dashboard() {
   const [applications, setApplications] = useState<any[]>([]);
+  const latestApplication =
+  applications.length > 0
+    ? applications[0]
+    : null;
   const [search, setSearch] = useState("");
 const [userData, setUserData] = useState<any>(null);
-const [cvAnalysis, setCvAnalysis] = useState<any>(null);
+const router = useRouter();
+
 
   useEffect(() => {
     fetchApplications();
@@ -48,15 +54,7 @@ const [cvAnalysis, setCvAnalysis] = useState<any>(null);
       .order("created_at", { ascending: false });
 
     setApplications(data || []);
-    const { data: analysis } = await supabase
-  .from("cv_analysis")
-  .select("*")
-  .eq("user_id", user.id)
-  .order("created_at", { ascending: false })
-  .limit(1)
-  .maybeSingle();
 
-setCvAnalysis(analysis);
   };
 
   const totalApps = applications.length;
@@ -117,11 +115,11 @@ setCvAnalysis(analysis);
     </Link>
 
     <Link
-      href="/upload-cv"
+      href="/resume"
       className="flex items-center gap-3 rounded-2xl px-4 py-3 text-slate-400 border border-transparent hover:border-indigo-500/20 hover:bg-white/5 transition-all duration-300"
     >
       <Upload size={18} />
-      Upload CV
+      Resume
     </Link>
 
     <Link
@@ -203,7 +201,50 @@ setCvAnalysis(analysis);
     <h1 className="text-4xl font-bold tracking-tight">
       Welcome back 👋
     </h1>
+<div className="mt-8 rounded-3xl border border-indigo-500/20 bg-gradient-to-r from-indigo-600/20 to-purple-600/10 p-8">
 
+<p className="text-slate-300">
+
+AI Career Assistant
+
+</p>
+
+<h2 className="mt-2 text-4xl font-bold">
+
+Track every application.
+Improve every interview.
+
+</h2>
+
+<p className="mt-5 max-w-2xl text-slate-400 leading-8">
+
+Analyze your resume, compare it with job descriptions, monitor your application progress and receive AI-powered career recommendations from one dashboard.
+
+</p>
+
+<div className="mt-8 flex gap-4">
+
+<button
+onClick={()=>router.push("/applications")}
+className="rounded-2xl bg-white px-6 py-4 text-black font-semibold cursor-pointer"
+>
+
+Browse Jobs
+
+</button>
+
+<button
+onClick={()=>router.push("/resume")}
+className="rounded-2xl border border-white/10 px-6 py-4 cursor-pointer hover:border-indigo-500/40 transition"
+>
+
+Analyze Resume
+
+</button>
+
+</div>
+
+</div>
 
 <p className="text-slate-400 mt-3 text-lg">
   Here's what's happening with your job search today.
@@ -212,9 +253,9 @@ setCvAnalysis(analysis);
 
   </div>
 
-<div className="grid grid-cols-4 gap-4 mb-5">
+<div className="grid grid-cols-12 gap-6 mb-5">
 
-  <div className="rounded-3xl bg-[#0F172A] border border-white/5 p-6 hover:border-indigo-500/30 transition-all">
+  <div className="col-span-3 rounded-3xl bg-[#0F172A] border border-white/5 p-6 hover:border-indigo-500/30 transition-all">
 
     <div className="flex items-center justify-between">
 
@@ -241,7 +282,7 @@ setCvAnalysis(analysis);
 
   </div>
 
-  <div className="rounded-3xl bg-[#0F172A] border border-white/5 p-6 hover:border-indigo-500/30 transition-all">
+  <div className="col-span-3 rounded-3xl bg-[#0F172A] border border-white/5 p-6 hover:border-indigo-500/30 transition-all">
 
     <div className="flex items-center justify-between">
 
@@ -273,7 +314,7 @@ setCvAnalysis(analysis);
 
   </div>
 
-  <div className="rounded-3xl bg-[#0F172A] border border-white/5 p-6 hover:border-indigo-500/30 transition-all">
+  <div className="col-span-3 rounded-3xl bg-[#0F172A] border border-white/5 p-6 hover:border-indigo-500/30 transition-all">
 
     <div className="flex items-center justify-between">
 
@@ -299,7 +340,7 @@ setCvAnalysis(analysis);
 
   </div>
 
-  <div className="rounded-3xl bg-[#0F172A] border border-white/5 p-6 hover:border-indigo-500/30 transition-all">
+  <div className="col-span-3 rounded-3xl bg-[#0F172A] border border-white/5 p-6 hover:border-indigo-500/30 transition-all">
 
     <div className="flex items-center justify-between">
 
@@ -327,9 +368,9 @@ setCvAnalysis(analysis);
 
 </div>
 
-<div className="grid grid-cols-4 gap-4 mb-5">
+<div className="grid grid-cols-12 gap-6 mb-5">
 
-  <div className="col-span-2 rounded-3xl bg-[#0F172A] border border-white/5 p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] h-[260px]">
+  <div className="col-span-7 rounded-3xl bg-[#0F172A] border border-white/5 p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] h-[260px]">
 
     <h3 className="text-xl font-semibold mb-6">
       Match Score Overview
@@ -425,73 +466,363 @@ setCvAnalysis(analysis);
     </div>
 
   </div>
-  <div className="rounded-3xl bg-[#0F172A] border border-white/5 p-4">
+  <div className="col-span-5 rounded-3xl bg-[#0F172A] border border-white/5 p-4">
 
-  <h3 className="text-xl font-semibold mb-6">
-    AI Insights
-  </h3>
+ <div className="col-span-5 rounded-3xl bg-[#0F172A] border border-white/5 p-6">
 
-  <div className="space-y-5">
-<div className="mb-4 rounded-2xl bg-[#111827] border border-white/5 p-4">
+<h3 className="text-2xl font-bold">
+Latest Application Analysis
+</h3>
 
-  <h3 className="text-xl font-semibold mb-6">
-    AI Resume Analysis
-  </h3>
+<p className="text-slate-400 mt-2">
+AI analysis from your most recent application.
+</p>
 
-  <p className="text-slate-400 mb-6">
-    Scan your latest resume and receive updated ATS feedback and AI recommendations.
-  </p>
+{latestApplication ? (
 
-  <button className="w-full rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 py-4 font-semibold hover:opacity-90 transition">
-    Analyze Resume
-  </button>
+<>
 
-</div>
-    <div>
-      <p className="text-slate-500 text-xs uppercase">
-        Strongest Area
-      </p>
+<div className="mt-8">
 
-      <p className="font-semibold mt-1">
-        {cvAnalysis?.strengths?.split(",")[0] ||
-  "Technical Skills"}
-      </p>
-    </div>
+<p className="text-slate-500 text-sm">
+Company
+</p>
 
-    <div>
-      <p className="text-slate-500 text-xs uppercase">
-        Missing Skills
-      </p>
+<div className="mt-4 flex items-center gap-4">
 
-      <p className="font-semibold mt-1 text-amber-400">
-        {
-  applications.find(
-    (app) => app.missing_skills
-  )?.missing_skills || "No missing skills"
-}
-      </p>
-    </div>
+  <Image
+    src={
+      latestApplication.company.toLowerCase().includes("google")
+        ? "/companies/google.png"
+        : latestApplication.company.toLowerCase().includes("microsoft")
+        ? "/companies/microsoft.png"
+        : latestApplication.company.toLowerCase().includes("amazon")
+        ? "/companies/amazon.png"
+        : latestApplication.company.toLowerCase().includes("adobe")
+        ? "/companies/adobe.png"
+        : "/companies/default.png"
+    }
+    className="h-12 w-12 rounded-xl object-contain border border-white/10 bg-white/5 p-2"
+    alt={latestApplication.company}
+    width={48}
+height={48}
+  />
 
-    <div>
-      <p className="text-slate-500 text-xs uppercase">
-        ATS Score
-      </p>
+  <div>
 
-      <p className="font-semibold mt-1 text-green-400">
-        {cvAnalysis?.ats_score || 0}/100
-      </p>
-    </div>
+    <p className="text-2xl font-bold">
+      {latestApplication.company}
+    </p>
 
+    <p className="text-slate-500">
+      {latestApplication.position}
+    </p>
 
   </div>
 
 </div>
-<div className="rounded-3xl bg-[#0F172A] border border-white/5 p-4">
+
+</div>
+
+<div className="mt-8">
+
+<p className="text-slate-500 text-sm">
+Match Score
+</p>
+
+<div className="mt-6 flex items-center gap-6">
+
+  <div className="relative h-28 w-28">
+
+    <svg
+      className="rotate-[-90deg]"
+      width="112"
+      height="112"
+    >
+
+      <circle
+        cx="56"
+        cy="56"
+        r="45"
+        stroke="#1E293B"
+        strokeWidth="8"
+        fill="none"
+      />
+
+      <circle
+        cx="56"
+        cy="56"
+        r="45"
+        stroke="#6366F1"
+        strokeWidth="8"
+        fill="none"
+        strokeDasharray="283"
+        strokeDashoffset={
+          283 -
+          (283 *
+            latestApplication.match_score) /
+            100
+        }
+        strokeLinecap="round"
+      />
+
+    </svg>
+
+    <div className="absolute inset-0 flex items-center justify-center">
+
+      <span className="text-2xl font-bold">
+
+        {latestApplication.match_score}%
+
+      </span>
+
+    </div>
+
+  </div>
+
+  <div>
+
+    <p className="text-xl font-semibold">
+
+      ATS Compatibility
+
+    </p>
+
+    <p className="text-slate-500 mt-2">
+
+      AI confidence based on your latest application.
+
+    </p>
+
+  </div>
+
+</div>
+
+
+</div>
+
+<div className="mt-8">
+
+<p className="text-slate-500 text-sm">
+Strengths
+</p>
+
+<div className="mt-3 flex flex-wrap gap-2">
+
+{latestApplication.strengths
+?.split(",")
+.map((skill:string)=>(
+
+<span
+key={skill}
+className="rounded-full bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300"
+>
+
+✓ {skill.trim()}
+
+</span>
+
+))}
+
+</div>
+
+</div>
+
+<div className="mt-8">
+
+<p className="text-slate-500 text-sm">
+Missing Skills
+</p>
+
+<div className="mt-3 flex flex-wrap gap-2">
+
+{latestApplication.missing_skills
+?.split(",")
+.map((skill:string)=>(
+
+<span
+key={skill}
+className="rounded-full bg-red-500/10 px-3 py-2 text-sm text-red-300"
+>
+
+{skill.trim()}
+
+</span>
+
+))}
+
+</div>
+
+</div>
+
+<div className="mt-8">
+
+<p className="text-slate-500 text-sm">
+AI Recommendation
+</p>
+
+<div className="mt-5 rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-5">
+
+<p className="text-slate-300 leading-8">
+
+{latestApplication.ai_suggestions}
+
+</p>
+
+</div>
+
+
+</div>
+
+<button
+
+onClick={()=>router.push("/resume")}
+
+className="
+mt-8
+w-full
+rounded-2xl
+bg-gradient-to-r
+from-indigo-600
+via-violet-600
+to-purple-600
+py-4
+font-semibold
+cursor-pointer
+transition-all
+duration-300
+hover:scale-[1.02]
+hover:shadow-[0_0_40px_rgba(99,102,241,.45)]
+active:scale-[0.98]
+"
+
+>
+
+Analyze Another CV
+
+</button>
+
+</>
+
+) : (
+
+<div className="mt-12 text-center">
+
+<p className="text-slate-500">
+
+No applications yet.
+
+</p>
+
+<button
+
+onClick={()=>router.push("/applications")}
+
+className="mt-6 rounded-2xl bg-indigo-600 px-6 py-4"
+
+>
+
+Browse Jobs
+
+</button>
+
+</div>
+
+)}
+
+</div>
+
+
+</div>
+<div className="col-span-12 rounded-3xl bg-[#0F172A] border border-white/5 p-4">
 
   <h3 className="text-xl font-semibold mb-6">
     Application Status
   </h3>
+<div className="col-span-12 rounded-3xl border border-white/5 bg-[#0F172A] p-6 mt-6">
 
+  <div className="flex items-center justify-between mb-6">
+
+    <h3 className="text-2xl font-bold">
+      Recent Applications
+    </h3>
+
+    <button
+      onClick={() => router.push("/applications")}
+      className="text-indigo-400 hover:text-indigo-300 transition cursor-pointer"
+    >
+      View All →
+    </button>
+
+  </div>
+
+  <div className="space-y-4">
+
+    {applications.slice(0,5).map((app)=>{
+
+      const logo =
+        app.company.toLowerCase().includes("google")
+          ? "/companies/google.png"
+          : app.company.toLowerCase().includes("microsoft")
+          ? "/companies/microsoft.png"
+          : app.company.toLowerCase().includes("amazon")
+          ? "/companies/amazon.png"
+          : app.company.toLowerCase().includes("adobe")
+          ? "/companies/adobe.png"
+          : "/companies/default.png";
+
+      return (
+
+        <div
+          key={app.id}
+          className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/[0.02] px-5 py-4 hover:border-indigo-500/30 transition"
+        >
+
+          <div className="flex items-center gap-4">
+
+            <Image
+              src={logo}
+              alt={app.company}
+              width={42}
+              height={42}
+              className="rounded-xl border border-white/10 bg-white/5 p-2"
+            />
+
+            <div>
+
+              <p className="font-semibold">
+                {app.company}
+              </p>
+
+              <p className="text-sm text-slate-500">
+                {app.position}
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="text-right">
+
+            <p className="font-bold text-indigo-400">
+              {app.match_score}%
+            </p>
+
+            <p className="text-xs text-slate-500">
+              {app.status}
+            </p>
+
+          </div>
+
+        </div>
+
+      );
+
+    })}
+
+  </div>
+
+</div>
  <div className="space-y-5">
 
   <div>
@@ -571,6 +902,7 @@ setCvAnalysis(analysis);
 
     <Link
       href="/applications"
+      
       className="inline-flex mt-4 rounded-xl bg-indigo-500 px-5 py-3"
     >
       Add First Application

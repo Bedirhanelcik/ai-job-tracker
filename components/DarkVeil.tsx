@@ -1,7 +1,14 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { Renderer, Program, Mesh, Triangle, Vec2 } from "ogl";
+import {
+  Renderer,
+  Program,
+  Mesh,
+  Triangle,
+  Transform,
+  Vec2,
+} from "ogl";
 
 const vertex = `
 attribute vec2 position;
@@ -135,7 +142,10 @@ try {
     });
 
     const mesh = new Mesh(gl, { geometry, program });
-
+    const scene = new Transform();
+mesh.setParent(scene);
+scene.addChild(mesh);
+mesh.setParent(scene);
     const resize = () => {
       const w = parent.clientWidth,
         h = parent.clientHeight;
@@ -150,13 +160,16 @@ try {
     let frame = 0;
 
     const loop = () => {
+      if (gl.isContextLost()) return;
       program.uniforms.uTime.value = ((performance.now() - start) / 1000) * speed;
       program.uniforms.uHueShift.value = hueShift;
       program.uniforms.uNoise.value = noiseIntensity;
       program.uniforms.uScan.value = scanlineIntensity;
       program.uniforms.uScanFreq.value = scanlineFrequency;
       program.uniforms.uWarp.value = warpAmount;
-      renderer.render({ scene: mesh });
+      renderer.render({
+  scene,
+});
       frame = requestAnimationFrame(loop);
     };
 
@@ -165,7 +178,6 @@ try {
   return () => {
   cancelAnimationFrame(frame);
   window.removeEventListener("resize", resize);
-  gl.getExtension("WEBGL_lose_context")?.loseContext();
 };
   }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale]);
   return <canvas ref={ref} className="w-full h-full block" />;
